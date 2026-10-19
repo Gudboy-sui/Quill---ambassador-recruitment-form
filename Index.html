@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quill Ambassador Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0a08;
+    --bg-2: #141210;
+    --card: #17140f;
+    --gold: #cba135;
+    --gold-bright: #e8c766;
+    --gold-dim: #8a6f27;
+    --hairline: #332b1c;
+    --text: #efe9db;
+    --muted: #a69a81;
+    --error: #e0745a;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(203,161,53,0.12), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    padding: 56px 18px 80px;
+    padding-top: calc(56px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    line-height: 1.6;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; }
+  .mark { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .mark svg { flex-shrink: 0; }
+  .mark span { font-family: 'Fraunces', serif; font-size: 18px; letter-spacing: 0.03em; color: var(--gold-bright); }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(30px, 5vw, 38px);
+    margin: 0 0 16px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .desc {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 54ch;
+    margin-bottom: 20px;
+  }
+  .honesty-note {
+    color: var(--gold-dim);
+    font-size: 13px;
+    font-style: italic;
+    max-width: 54ch;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .field { margin-bottom: 30px; padding-bottom: 2px; }
+  label { display: block; font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .q-num { color: var(--gold-dim); font-variant-numeric: tabular-nums; margin-right: 8px; font-size: 14px; }
+  .opt { font-weight: 400; color: var(--muted); font-size: 13px; }
+  input[type="text"], input[type="tel"], textarea {
+    width: 100%;
+    padding: 12px 2px;
+    border: none;
+    border-bottom: 1px solid var(--hairline);
+    background: transparent;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.15s ease;
+  }
+  textarea { min-height: 84px; line-height: 1.55; }
+  input::placeholder, textarea::placeholder { color: #564c38; }
+  input:focus, textarea:focus { outline: none; border-bottom-color: var(--gold); }
+  .submit-row { margin-top: 36px; text-align: center; }
+  button {
+    display: inline-block;
+    min-width: 220px;
+    padding: 11px 28px;
+    border-radius: 2px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  button:hover { background: var(--gold); color: #0b0a08; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .error-msg { color: var(--error); font-size: 12.5px; margin-top: 6px; display: none; }
+  .form-error-banner {
+    display: none;
+    background: rgba(224,116,90,0.08);
+    border: 1px solid var(--error);
+    color: var(--error);
+    padding: 12px 14px;
+    border-radius: 2px;
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+  .success { text-align: center; padding: 60px 0; }
+  .success .mark { justify-content: center; }
+  .success h2 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 26px; margin: 20px 0 10px; color: var(--gold-bright); }
+  .success p { color: var(--muted); font-size: 15px; }
+  @media (max-width: 420px) { body { padding-left: 16px; padding-right: 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="formView">
+    <div class="mark">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M4 20L18 4M18 4L13 4.5M18 4L17.5 9" stroke="#cba135" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Quill</span>
+    </div>
+
+    <h1>Ambassador Application</h1>
+    <p class="desc">Before anything else — thank you for taking the time to fill this out. This is a short form to help me understand if this opportunity is a good fit for you. Please be honest; there are no wrong answers, and being straightforward helps both of us.</p>
+    <p class="honesty-note">A quick note: I'm not scoring these for the "right" answer — I'm reading for honesty. Vague or inflated answers are more obvious than you'd think, and they're the fastest way to rule yourself out.</p>
+
+    <div class="form-error-banner" id="errorBanner">Something went wrong submitting the form. Please try again.</div>
+
+    <form id="appForm">
+      <div class="field">
+        <label for="full_name"><span class="q-num">01</span>Your full name</label>
+        <input type="text" id="full_name" name="full_name" required>
+        <div class="error-msg">This field is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="phone"><span class="q-num">02</span>Your WhatsApp phone number</label>
+        <input type="tel" id="phone" name="phone" required>
+        <div class="error-msg">This field is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="email"><span class="q-num">03</span>Your email address</label>
+        <input type="text" id="email" name="email" required>
+        <div class="error-msg">This field is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="relationship"><span class="q-num">04</span>How do you know me? How long have you known each other?</label>
+        <textarea id="relationship" name="relationship" required></textarea>
+        <div class="error-msg">This field is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="understanding"><span class="q-num">05</span>In your own words, what did you understand about the project after our conversation?</label>
+        <textarea id="understanding" name="understanding" required></textarea>
+        <div class="error-msg">This field is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="social_circle"><span class="q-num">06</span>How would you describe your social circle — the kinds of people around you, what they do, their general financial situation?</label>
+        <textarea id="social_circle" name="social_circle" required></textarea>
+        <div class="error-msg">This field is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="track_record"><span class="q-num">07</span>Have you ever recommended something to someone — an app, a business idea, an investment — and they actually tried it? Tell me about it briefly. <span class="opt">(optional)</span></label>
+        <textarea id="track_record" name="track_record"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="motivation"><span class="q-num">08</span>Be honest — how motivated are you to actively tell people about this, and why?</label>
+        <textarea id="motivation" name="motivation" required></textarea>
+        <div class="error-msg">This field is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="concerns"><span class="q-num">09</span>Is there anything about this opportunity that concerns you or that you'd like clarity on? <span class="opt">(optional)</span></label>
+        <textarea id="concerns" name="concerns"></textarea>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" id="submitBtn">Submit application</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="success" id="successView" style="display:none;">
+    <div class="mark">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M4 20L18 4M18 4L13 4.5M18 4L17.5 9" stroke="#cba135" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Quill</span>
+    </div>
+    <h2>Thanks for filling this out.</h2>
+    <p>I'll review your response personally and get back to you.</p>
+  </div>
+
+</div>
+
+<script>
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xppqbnoy";
+
+  const form = document.getElementById("appForm");
+  const errorBanner = document.getElementById("errorBanner");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    errorBanner.style.display = "none";
+
+    let valid = true;
+    form.querySelectorAll("[required]").forEach(function (field) {
+      const errorEl = field.parentElement.querySelector(".error-msg");
+      if (!field.value.trim()) {
+        valid = false;
+        if (errorEl) errorEl.style.display = "block";
+        field.style.borderBottomColor = "var(--error)";
+      } else {
+        if (errorEl) errorEl.style.display = "none";
+        field.style.borderBottomColor = "var(--hairline)";
+      }
+    });
+
+    if (!valid) {
+      const firstInvalid = form.querySelector('[required]:invalid, .error-msg[style*="block"]');
+      const firstBad = Array.from(form.querySelectorAll('[required]')).find(f => !f.value.trim());
+      if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting…";
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: formData,
+        headers: { "Accept": "application/json" }
+      });
+
+      if (response.ok) {
+        document.getElementById("formView").style.display = "none";
+        document.getElementById("successView").style.display = "block";
+      } else {
+        throw new Error("Submission failed");
+      }
+    } catch (err) {
+      errorBanner.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit application";
+    }
+  });
+</script>
+</body>
+</html>
